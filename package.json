@@ -1,0 +1,17 @@
+{
+  "name": "xueqiu-stock",
+  "version": "1.0.0",
+  "description": "check xueqiu stock in menubar",
+  "dependencies": {
+    "electron-debug": "^0.1.0",
+    "lodash": "^3.9.3",
+    "menubar": "*",
+    "request": "^2.57.0"
+  },
+  "devDependencies": {},
+  "main": "main.js",
+  "scripts": {
+    "build": "electron-packager . 雪球股票助手 --platform=darwin --arch=x64 --version=0.27.2 --ignore=node_modules/electron --icon=images/Icon.icns",
+    "start": "electron ."
+  }
+}

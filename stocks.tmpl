@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    <tr>
+      <th class="left">股票</th>
+      <th>当前价</th>
+      <th>涨跌幅</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% stocks.forEach(function (stock, idx) { %>
+      <tr>
+        <td class="left">
+          <%= stock.stockName %>
+          <br>
+          <span class="code"><%= stock.code %></span>
+        </td>
+        <td>
+          <%= stock.current %>
+        </td>
+        <td class="<%= parseFloat(stock.change) > 0 ? 'up' : 'down' %>">
+          <%= stock.percentage %>(<%= stock.change %>%)
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
