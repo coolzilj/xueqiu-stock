@@ -3,106 +3,63 @@
 <head>
   <title>雪球股票</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <style>
-    body {
-      font: 13px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    #container {
-      margin-bottom: 35px;
-    }
-
-    table {
-      border-spacing: 0;
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 100%;
-      font-size: 14px;
-    }
-
-    table > thead > tr > th {
-      vertical-align: bottom;
-      border-top: 0;
-      border-bottom: 2px solid #ddd;
-      padding: 5px;
-      line-height: 1.5;
-      text-align: right;
-    }
-
-    table > tbody > tr:nth-child(odd) {
-      background-color: #f9f9f9;
-    }
-
-    table > tbody > tr > td {
-      padding: 5px;
-      vertical-align: center;
-      border-top: 1px solid #ddd;
-      text-align: right;
-    }
-
-    table > thead > tr > th.left {
-      text-align: left;
-    }
-
-    table > tbody > tr > td.left {
-      text-align: left;
-      padding: 3px;
-      line-height: 1.5;
-      font-size: 13px;
-    }
-
-    td.up {
-      color: #DD5533;
-    }
-
-    td.down {
-      color: #4A912D;
-    }
-
-    td span.code {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.91);
-    }
-
-    #footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 35px;
-      border-top: 1px solid #ddd;
-      background-color: #eee;
-    }
-
-    button {
-      height: 25px;
-      border-radius: 3px;
-      border: 1px solid #ddd;
-      background-color: #fff;
-      margin: 5px;
-      outline: 0;
-    }
-
-    #open-dir {
-      float: left;
-    }
-
-    #quit {
-      float: right;
-    }
-  </style>
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-  <div id="container"></div>
-  <div id="footer">
-    <button id="open-dir">
-      打开配置文件
-    </button>
-    <button id="quit">
-      退出
-    </button>
+  <script type="text/x-template" id="stock-grid-template">
+    <table>
+      <thead>
+        <tr>
+          <th v-repeat="column: columns"
+              v-on="click:sortBy(column.key)"
+              v-class="
+                left: $index == 0
+          ">
+            {{column.displayName}}
+            <span class="arrow"
+                  v-class="reversed[column.key] ? 'dsc' : 'asc'">
+            </span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-repeat="
+              entry: data
+              | orderBy sortKey reversed[sortKey]">
+          <td class="left">
+            {{entry.stockName}}
+            <br/>
+            <span class="code">{{entry.code}}</span>
+          </td>
+          <td>
+            {{entry.current}}
+          </td>
+          <td v-class="
+                up: entry.change > 0,
+                down: entry.change < 0
+          ">
+            {{entry.change}}({{entry.percentage}}%)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
+
+  <div id="container">
+
+    <stock-grid v-with="
+      data      : gridData,
+      columns   : gridColumns,
+    "></stock-grid>
+
+    <div id="footer">
+      <button v-on="click: onOpenDir" id="open-dir">打开配置文件</button>
+      <button v-on="click: onTerminate" id="quit">退出</button>
+    </div>
   </div>
+
   <script>
     require('./app.js')
   </script>
