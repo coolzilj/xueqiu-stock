@@ -68,12 +68,12 @@ menu.on('ready', function ready() {
 
   var refreshTimer = null;
   menu.on('show', function() {
-    console.log('register refresh timer');
+    // console.log('register refresh timer');
     refreshTimer = setInterval(getStocks, 30000);
   });
 
   menu.on('hide', function() {
-    console.log('clear refresh timer');
+    // console.log('clear refresh timer');
     clearInterval(refreshTimer);
   });
 
@@ -100,13 +100,16 @@ menu.on('ready', function ready() {
                 code: _.pluck(stocks, 'code').join(',')
               }
             }, function(err, res, body) {
-              _.map(stocks, function(stock, idx) {
+              var slimStocks = [];
+              _.each(stocks, function(stock, idx) {
                 var s = JSON.parse(body).quotes[idx];
-                stock.current = s.current;
-                stock.percentage = s.percentage;
-                stock.change = s.change;
+                stock = _.pick(stock, 'stockName', 'code');
+                stock.current = parseFloat(s.current);
+                stock.percentage = parseFloat(s.percentage);
+                stock.change = parseFloat(s.change);
+                slimStocks.push(stock);
               });
-              menu.window.webContents.send('got-all', stocks);
+              menu.window.webContents.send('got-all', slimStocks);
             });
           }
         });
