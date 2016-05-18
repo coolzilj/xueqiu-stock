@@ -4,6 +4,7 @@
   "description": "check xueqiu stock in menubar",
   "dependencies": {
     "electron-debug": "^0.1.0",
+    "electron-packager": "*",
     "lodash": "^3.9.3",
     "menubar": "*",
     "request": "^2.57.0",
